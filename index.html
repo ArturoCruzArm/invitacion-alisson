@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis XV Años - [NOMBRE DE LA QUINCEAÑERA]</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="crown">👑</div>
+                <h1 class="quinceañera-name">[NOMBRE DE LA QUINCEAÑERA]</h1>
+                <p class="subtitle">Mis XV Años</p>
+                <div class="date">
+                    <i class="far fa-calendar"></i>
+                    <span>Sábado, 8 de Noviembre 2025</span>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </section>
+
+        <!-- Message Section -->
+        <section class="message">
+            <div class="content-box">
+                <h2>Un Mensaje Especial</h2>
+                <div class="message-text">
+                    <p>Hoy hace quince años mi madre y abuelos daban gracias a dios por mi llegada.</p>
+                    <p>Hoy yo doy gracias por ellos, por cuidarme, aconsejarme y tenerme paciencia.</p>
+                    <p>Doy gracias también a toda mi familia por hacer más especial este día.</p>
+                    <p class="thanks">GRACIAS 🫂</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Details Section -->
+        <section class="events">
+            <div class="content-box">
+                <h2>Celebración</h2>
+
+                <!-- Misa -->
+                <div class="event-card">
+                    <div class="event-icon">⛪</div>
+                    <h3>Misa de Acción de Gracias</h3>
+                    <div class="event-details">
+                        <p class="time">
+                            <i class="far fa-clock"></i>
+                            5:00 PM
+                        </p>
+                        <p class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Templo Sagrado Corazón de Jesús<br>
+                            Colonia Los Pinos
+                        </p>
+                        <button class="btn-map" onclick="openMap('misa')">
+                            <i class="fas fa-directions"></i>
+                            Cómo llegar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recepción -->
+                <div class="event-card">
+                    <div class="event-icon">🎉</div>
+                    <h3>Recepción</h3>
+                    <div class="event-details">
+                        <p class="time">
+                            <i class="far fa-clock"></i>
+                            7:00 PM
+                        </p>
+                        <p class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Salón Grand Castillo
+                        </p>
+                        <button class="btn-map" onclick="openMap('recepcion')">
+                            <i class="fas fa-directions"></i>
+                            Cómo llegar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Family Section -->
+        <section class="family">
+            <div class="content-box">
+                <h2>Con el Amor de</h2>
+
+                <div class="family-group">
+                    <h3>Mis Padres</h3>
+                    <p class="family-names">
+                        [NOMBRE DEL PAPÁ]<br>
+                        Elizabeth Flores
+                    </p>
+                </div>
+
+                <div class="family-group">
+                    <h3>Mis Padrinos</h3>
+                    <p class="family-names">
+                        [NOMBRES DE LOS PADRINOS]
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countdown Section -->
+        <section class="countdown">
+            <div class="content-box">
+                <h2>Cuenta Regresiva</h2>
+                <div id="countdown" class="countdown-display">
+                    <div class="time-unit">
+                        <span id="days" class="time-value">00</span>
+                        <span class="time-label">Días</span>
+                    </div>
+                    <div class="time-unit">
+                        <span id="hours" class="time-value">00</span>
+                        <span class="time-label">Horas</span>
+                    </div>
+                    <div class="time-unit">
+                        <span id="minutes" class="time-value">00</span>
+                        <span class="time-label">Minutos</span>
+                    </div>
+                    <div class="time-unit">
+                        <span id="seconds" class="time-value">00</span>
+                        <span class="time-label">Segundos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP Section -->
+        <section class="rsvp">
+            <div class="content-box">
+                <h2>Confirma tu Asistencia</h2>
+                <p>Tu presencia es muy importante para mí</p>
+                <a href="https://wa.me/524775878517?text=Hola%20Elizabeth,%20confirmo%20mi%20asistencia%20a%20los%20XV%20años" class="btn-whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    Confirmar por WhatsApp
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Fotografía y Video por</p>
+            <p class="footer-brand">Foro 7</p>
+            <p>Arturo Cruz • 477 920 3776</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
