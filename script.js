@@ -71,3 +71,35 @@ document.querySelectorAll('section').forEach(section => {
 // Hero section should be visible immediately
 document.querySelector('.hero').style.opacity = '1';
 document.querySelector('.hero').style.transform = 'translateY(0)';
+
+// Music Toggle Function
+let isPlaying = false;
+const music = document.getElementById('background-music');
+const musicToggle = document.getElementById('music-toggle');
+
+function toggleMusic() {
+    if (isPlaying) {
+        music.pause();
+        musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+        musicToggle.classList.remove('playing');
+    } else {
+        music.play();
+        musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+        musicToggle.classList.add('playing');
+    }
+    isPlaying = !isPlaying;
+}
+
+// Auto-play music on user interaction (browsers block autoplay)
+document.addEventListener('click', function initMusic() {
+    if (!isPlaying) {
+        music.play().then(() => {
+            isPlaying = true;
+            musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+            musicToggle.classList.add('playing');
+        }).catch(() => {
+            // Autoplay was prevented
+        });
+    }
+    document.removeEventListener('click', initMusic);
+}, { once: true });

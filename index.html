@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis XV Años - [NOMBRE DE LA QUINCEAÑERA]</title>
+    <title>Mis XV Años - Alisson Emireth</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- Reproductor de Música -->
+    <audio id="background-music" autoplay loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-toggle" class="music-toggle" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </button>
+
     <div class="container">
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <div class="crown">👑</div>
-                <h1 class="quinceañera-name">[NOMBRE DE LA QUINCEAÑERA]</h1>
+                <h1 class="quinceañera-name">Alisson Emireth</h1>
                 <p class="subtitle">Mis XV Años</p>
                 <div class="date">
                     <i class="far fa-calendar"></i>
@@ -54,8 +62,8 @@
                         </p>
                         <p class="location">
                             <i class="fas fa-map-marker-alt"></i>
-                            Templo Sagrado Corazón de Jesús<br>
-                            Colonia Los Pinos
+                            Templo del Sagrado Corazón de Jesús<br>
+                            Los Pinos, León
                         </p>
                         <button class="btn-map" onclick="openMap('misa')">
                             <i class="fas fa-directions"></i>
@@ -75,7 +83,8 @@
                         </p>
                         <p class="location">
                             <i class="fas fa-map-marker-alt"></i>
-                            Salón Grand Castillo
+                            Grand Castillo<br>
+                            Avenida La Merced, León
                         </p>
                         <button class="btn-map" onclick="openMap('recepcion')">
                             <i class="fas fa-directions"></i>
@@ -92,17 +101,17 @@
                 <h2>Con el Amor de</h2>
 
                 <div class="family-group">
-                    <h3>Mis Padres</h3>
+                    <h3>Mi Madre</h3>
                     <p class="family-names">
-                        [NOMBRE DEL PAPÁ]<br>
-                        Elizabeth Flores
+                        Alma Patricia Flores Castro
                     </p>
                 </div>
 
                 <div class="family-group">
                     <h3>Mis Padrinos</h3>
                     <p class="family-names">
-                        [NOMBRES DE LOS PADRINOS]
+                        Erika Guadalupe Flores Castro<br>
+                        José Ismael Sánchez Razo
                     </p>
                 </div>
             </div>
@@ -138,7 +147,7 @@
             <div class="content-box">
                 <h2>Confirma tu Asistencia</h2>
                 <p>Tu presencia es muy importante para mí</p>
-                <a href="https://wa.me/524775878517?text=Hola%20Elizabeth,%20confirmo%20mi%20asistencia%20a%20los%20XV%20años" class="btn-whatsapp" target="_blank">
+                <a href="https://wa.me/524775878517?text=Hola%20Alma%20Patricia,%20confirmo%20mi%20asistencia%20a%20los%20XV%20años%20de%20Alisson%20Emireth" class="btn-whatsapp" target="_blank">
                     <i class="fab fa-whatsapp"></i>
                     Confirmar por WhatsApp
                 </a>
