@@ -3,103 +3,931 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selector de Fotos - Alisson Emireth XV Años</title>
+    <title>Selector de Fotos - XV Años Alisson Emireth</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="css/selector.css">
-    <link rel="stylesheet" href="css/proteccion.css">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --emerald: #064420;
+            --emerald-light: #0a6b35;
+            --emerald-dark: #032210;
+            --gold: #d4af37;
+            --gold-light: #f4d03f;
+            --gold-dark: #b8941f;
+            --cream: #faf8f3;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, var(--emerald-dark) 0%, var(--emerald) 50%, var(--emerald-light) 100%);
+            color: var(--cream);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--gold-light);
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            color: var(--cream);
+            font-size: 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(1100px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--gold);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-info h3 {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-count {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold-light);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-filter {
+            background: var(--gold);
+            color: var(--emerald-dark);
+        }
+
+        .btn-filter:hover,
+        .btn-filter.active {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-export,
+        .btn-share {
+            background: var(--emerald-light);
+            color: var(--cream);
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Gallery */
+        .gallery-section {
+            padding: 20px 0 40px;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .photo-badges {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .badge {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.ampliacion {
+            background: #9c27b0;
+        }
+
+        .badge.impresion {
+            background: #2196f3;
+        }
+
+        .badge.redes_sociales {
+            background: #4caf50;
+        }
+
+        .badge.invitaciones_web {
+            background: #ff91000;
+        }
+
+        .badge.descartada {
+            background: #f44336;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--emerald-dark);
+            border-radius: 20px;
+            max-width: 1200px;
+            width: 95%;
+            max-height: 95vh;
+            overflow-y: auto;
+            position: relative;
+            border: 3px solid var(--gold);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2.5rem;
+            color: var(--gold);
+            cursor: pointer;
+            z-index: 10;
+            line-height: 1;
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212, 175, 55, 0.9);
+            color: var(--emerald-dark);
+            border: none;
+            font-size: 3rem;
+            padding: 20px 15px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .modal-nav:hover {
+            background: var(--gold-light);
+        }
+
+        .modal-nav-prev {
+            left: 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .modal-nav-next {
+            right: 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .modal-image-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .modal-image-container img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .modal-photo-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .modal-options {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .modal-options h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            text-align: center;
+            color: var(--cream);
+            margin-bottom: 25px;
+        }
+
+        .option-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(1100px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--gold);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            color: var(--cream);
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .option-btn.selected {
+            background: var(--gold);
+            color: var(--emerald-dark);
+        }
+
+        .option-icon {
+            display: block;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .option-check {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            display: none;
+        }
+
+        .option-btn.selected .option-check {
+            display: block;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-save {
+            background: var(--gold);
+            color: var(--emerald-dark);
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--emerald-dark);
+            color: var(--gold);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 40px;
+            border-top: 2px solid var(--gold);
+        }
+
+        footer p {
+            color: var(--gold);
+            margin: 8px 0;
+        }
+
+        /* Fixed Rose Decorations */
+        .fixed-roses {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .rose-decoration {
+            position: fixed;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .rose-decoration.top-left {
+            top: -20px;
+            left: -20px;
+            width: min(450px, 35vw);
+            animation: gentleFloat 8s ease-in-out infinite;
+        }
+
+        .rose-decoration.bottom-right {
+            bottom: -20px;
+            right: -20px;
+            width: min(500px, 40vw);
+            animation: gentleFloat 10s ease-in-out infinite reverse;
+        }
+
+        .rose-decoration img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-15px) translateX(5px) rotate(1deg);
+            }
+            66% {
+                transform: translateY(10px) translateX(-5px) rotate(-1deg);
+            }
+        }
+
+        /* Text Animation Effects */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Delay classes for staggered animations */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        .delay-6 { transition-delay: 0.6s; }
+
+        /* Additional animation keyframes */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(12px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .rose-decoration.top-left,
+            .rose-decoration.bottom-right {
+                width: 200px;
+            }
+
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .photo-card img {
+                height: 200px;
+            }
+
+            .modal-nav {
+                font-size: 2rem;
+                padding: 15px 10px;
+            }
+
+            .option-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 4100px) {
+            .rose-decoration.top-left,
+            .rose-decoration.bottom-right {
+                width: 150px;
+            }
+        }
+
+        /* Featured Improvement Section */
+        .featured-improvement {
+            background: linear-gradient(135deg, #064420 0%, #0a6b35 100%);
+            padding: 40px 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .improvement-title {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .improvement-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .improvement-photo {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .improvement-photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px;
+        }
+
+        .photo-label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gold);
+            color: var(--emerald-dark);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .improvement-details {
+            padding: 10px;
+        }
+
+        .improvement-details h3 {
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+
+        .improvement-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .improvement-section h4 {
+            color: var(--gold-light);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .improvement-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .improvement-section li {
+            padding: 6px 0 6px 25px;
+            position: relative;
+            color: var(--cream);
+            line-height: 1.6;
+        }
+
+        .improvement-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .improvement-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .improvement-actions .btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-accept {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-suggest {
+            background: linear-gradient(135deg, #3498db 0%, #29100b9 100%);
+            color: white;
+        }
+
+        .btn-suggest:hover {
+            background: linear-gradient(135deg, #29100b9 0%, #21618c 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-undo {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .btn-undo:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Responsive for Featured Improvement */
+        @media (max-width: 968px) {
+            .improvement-card {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .improvement-title {
+                font-size: 2rem;
+            }
+
+            .improvement-actions {
+                flex-direction: column;
+            }
+
+            .improvement-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
+    <!-- Fixed Rose Decorations -->
+    <div class="fixed-roses">
+        <div class="rose-decoration top-left">
+            <img src="rosa-izquierda.png" alt="" aria-hidden="true">
+        </div>
+        <div class="rose-decoration bottom-right">
+            <img src="rosa-derecha.png" alt="" aria-hidden="true">
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
             <h1 class="main-title">Selector de Fotos</h1>
-            <h2 class="subtitle">XV Años de Alisson Emireth</h2>
-            <p class="instructions">Haz clic en cada foto para seleccionar qué quieres hacer con ella. Utiliza los botones de filtro para ver las fotos por categoría.</p>
-        </div>
-    </header>
-
-    <!-- Control Panel -->
-    <section class="control-panel">
-        <div class="container">
-            <div class="stats-row">
-                <div class="stat-card ampliacion">
-                    <div class="stat-icon">🖼️</div>
-                    <div class="stat-info">
-                        <h3>Ampliación</h3>
-                        <p class="stat-count" id="countAmpliacion">0</p>
-                        <small style="font-size: 0.75rem; opacity: 0.7;">Recomendado: 1</small>
-                    </div>
-                </div>
-                <div class="stat-card impresion">
-                    <div class="stat-icon">📸</div>
-                    <div class="stat-info">
-                        <h3>Impresión</h3>
-                        <p class="stat-count" id="countImpresion">0</p>
-                        <small style="font-size: 0.75rem; opacity: 0.7;">Recomendado: 100</small>
-                    </div>
-                </div>
-                <div class="stat-card redes-sociales">
-                    <div class="stat-icon">📱</div>
-                    <div class="stat-info">
-                        <h3>Redes Sociales</h3>
-                        <p class="stat-count" id="countRedesSociales">0</p>
-                    </div>
-                </div>
-                <div class="stat-card descartada">
-                    <div class="stat-icon">❌</div>
-                    <div class="stat-info">
-                        <h3>Descartadas</h3>
-                        <p class="stat-count" id="countDescartada">0</p>
-                    </div>
-                </div>
-                <div class="stat-card sin-clasificar">
-                    <div class="stat-icon">⭕</div>
-                    <div class="stat-info">
-                        <h3>Sin Clasificar</h3>
-                        <p class="stat-count" id="countSinClasificar">246</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn btn-filter" id="btnFilterAll">Todas (246)</button>
-                <button class="btn btn-filter filter-ampliacion" id="btnFilterAmpliacion">Ampliación (0/1)</button>
-                <button class="btn btn-filter filter-impresion" id="btnFilterImpresion">Impresión (0/100)</button>
-                <button class="btn btn-filter filter-redes-sociales" id="btnFilterRedesSociales">Redes Sociales (0)</button>
-                <button class="btn btn-filter filter-descartada" id="btnFilterDescartada">Descartadas (0)</button>
-                <button class="btn btn-filter filter-sin-clasificar" id="btnFilterSinClasificar">Sin Clasificar (246)</button>
-            </div>
-
-            <div class="action-buttons secondary">
-                <button class="btn btn-export" id="btnExport">📥 Descargar Reporte</button>
-                <button class="btn btn-share" id="btnShare">📤 Copiar Resumen</button>
-                <button class="btn btn-clear" id="btnClear">🗑️ Limpiar Todo</button>
-            </div>
-            <p class="instructions" style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
-                <strong>Instrucciones de filtrado:</strong> Haz clic en los botones de arriba para ver solo las fotos de esa categoría.
-                Cuando abres una foto, puedes navegar entre las fotos filtradas con las flechas.
+            <h2 class="subtitle">XV Años - Alisson Emireth</h2>
+            <p class="instructions">
+                Haz clic en cada foto para seleccionar qué quieres hacer con ella.
+                Puedes elegir fotos para ampliación, impresión o compartir en redes sociales.
             </p>
-        </div>
-    </section>
+        </header>
+        
 
-    <!-- Gallery -->
-    <section class="gallery-section">
-        <div class="container">
-            <div class="photos-grid" id="photosGrid"></div>
-        </div>
-    </section>
+        
 
-    <!-- Modal for Photo Selection -->
+        <!-- Control Panel -->
+        <section class="control-panel">
+            <div class="container">
+                <div class="stats-row">
+                    <div class="stat-card ampliacion">
+                        <div class="stat-icon"><i class="fas fa-image"></i></div>
+                        <div class="stat-info">
+                            <h3>Ampliación</h3>
+                            <p class="stat-count" id="countAmpliacion">0</p>
+                            <small style="font-size: 0.75rem; opacity: 0.7;">Recomendado: 1</small>
+                        </div>
+                    </div>
+                    <div class="stat-card impresion">
+                        <div class="stat-icon"><i class="fas fa-camera"></i></div>
+                        <div class="stat-info">
+                            <h3>Impresión</h3>
+                            <p class="stat-count" id="countImpresion">0</p>
+                            <small style="font-size: 0.75rem; opacity: 0.7;">Recomendado: 100</small>
+                        </div>
+                    </div>
+                    <div class="stat-card redes-sociales">
+                        <div class="stat-icon"><i class="fas fa-share-alt"></i></div>
+                        <div class="stat-info">
+                            <h3>Redes Sociales</h3>
+                            <p class="stat-count" id="countRedesSociales">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card invitaciones-web">
+                        <div class="stat-icon"><i class="fas fa-globe"></i></div>
+                        <div class="stat-info">
+                            <h3>Invitaciones Web</h3>
+                            <p class="stat-count" id="countInvitacionesWeb">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card descartada">
+                        <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                        <div class="stat-info">
+                            <h3>Descartadas</h3>
+                            <p class="stat-count" id="countDescartada">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card sin-clasificar">
+                        <div class="stat-icon"><i class="far fa-circle"></i></div>
+                        <div class="stat-info">
+                            <h3>Sin Clasificar</h3>
+                            <p class="stat-count" id="countSinClasificar">246</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-filter active" id="btnFilterAll">Todas (246)</button>
+                    <button class="btn btn-filter" id="btnFilterAmpliacion">Ampliación (0)</button>
+                    <button class="btn btn-filter" id="btnFilterImpresion">Impresión (0)</button>
+                    <button class="btn btn-filter" id="btnFilterRedesSociales">Redes Sociales (0)</button>
+                    <button class="btn btn-filter" id="btnFilterInvitacionesWeb">Invitaciones Web (0)</button>
+                    <button class="btn btn-filter" id="btnFilterDescartada">Descartadas (0)</button>
+                    <button class="btn btn-filter" id="btnFilterSinClasificar">Sin Clasificar (246)</button>
+                </div>
+
+                <div class="action-buttons secondary">
+                    <button class="btn btn-export" id="btnExport"><i class="fab fa-whatsapp"></i> Enviar Reporte</button>
+                    <button class="btn btn-share" id="btnShare"><i class="fas fa-share"></i> Compartir por WhatsApp</button>
+                    <button class="btn btn-clear" id="btnClear"><i class="fas fa-trash-alt"></i> Limpiar Todo</button>
+                    <a href="index.html" class="btn" style="background: var(--emerald-light);"><i class="fas fa-arrow-left"></i> Volver a la Invitación</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section class="gallery-section">
+            <div class="container">
+                <div class="photos-grid" id="photosGrid"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
     <div id="photoModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <button class="modal-nav modal-nav-prev" id="btnPrevPhoto" title="Foto anterior (←)">
-                <span>‹</span>
-            </button>
-            <button class="modal-nav modal-nav-next" id="btnNextPhoto" title="Siguiente foto (→)">
-                <span>›</span>
-            </button>
+            <span class="modal-close" id="modalClose">&times;</span>
+            <button class="modal-nav modal-nav-prev" id="btnPrevPhoto">‹</button>
+            <button class="modal-nav modal-nav-next" id="btnNextPhoto">›</button>
             <div class="modal-body">
                 <div class="modal-image-container">
                     <img id="modalImage" src="" alt="Foto seleccionada">
@@ -110,25 +938,30 @@
                     <p class="modal-subtitle">Puedes seleccionar una o varias opciones</p>
 
                     <div class="option-buttons">
-                        <button class="option-btn ampliacion" data-category="ampliacion">
-                            <span class="option-icon">🖼️</span>
-                            <span class="option-text">Ampliación<br><small style="font-size: 0.75rem; opacity: 0.7;">(recom. 1)</small></span>
-                            <span class="option-check">✓</span>
+                        <button class="option-btn" data-category="ampliacion">
+                            <span class="option-icon"><i class="fas fa-image"></i></span>
+                            <span class="option-text">Ampliación</span>
+                            <span class="option-check"><i class="fas fa-check"></i></span>
                         </button>
-                        <button class="option-btn impresion" data-category="impresion">
-                            <span class="option-icon">📸</span>
-                            <span class="option-text">Impresión<br><small style="font-size: 0.75rem; opacity: 0.7;">(recom. 100)</small></span>
-                            <span class="option-check">✓</span>
+                        <button class="option-btn" data-category="impresion">
+                            <span class="option-icon"><i class="fas fa-camera"></i></span>
+                            <span class="option-text">Impresión</span>
+                            <span class="option-check"><i class="fas fa-check"></i></span>
                         </button>
-                        <button class="option-btn redes-sociales" data-category="redes_sociales">
-                            <span class="option-icon">📱</span>
+                        <button class="option-btn" data-category="redes_sociales">
+                            <span class="option-icon"><i class="fas fa-share-alt"></i></span>
                             <span class="option-text">Redes Sociales</span>
-                            <span class="option-check">✓</span>
+                            <span class="option-check"><i class="fas fa-check"></i></span>
                         </button>
-                        <button class="option-btn descartada" data-category="descartada">
-                            <span class="option-icon">❌</span>
+                        <button class="option-btn" data-category="invitaciones_web">
+                            <span class="option-icon"><i class="fas fa-globe"></i></span>
+                            <span class="option-text">Invitaciones Web</span>
+                            <span class="option-check"><i class="fas fa-check"></i></span>
+                        </button>
+                        <button class="option-btn" data-category="descartada">
+                            <span class="option-icon"><i class="fas fa-times-circle"></i></span>
                             <span class="option-text">Descartar</span>
-                            <span class="option-check">✓</span>
+                            <span class="option-check"><i class="fas fa-check"></i></span>
                         </button>
                     </div>
 
@@ -141,16 +974,86 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div id="toast" class="toast"></div>
 
-    <script src="js/proteccion.js"></script>
-    <script src="js/selector.js"></script>
+    <!-- Suggestions Section -->
+    <div class="container">
+        <section class="feedback-section" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 40px 30px; margin: 30px 0; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.2);">
+            <h2 style="font-family: 'Playfair Display', serif; color: var(--gold); text-align: center; font-size: clamp(1.8rem, 5vw, 2.5rem); margin-bottom: 20px;"><i class="fas fa-comments"></i> Sugerencias de Cambios en Fotos</h2>
+            <p style="text-align: center; color: var(--cream); margin-bottom: 30px;">
+                Si deseas sugerir algún cambio o edición en alguna foto, agrégalo aquí
+            </p>
 
-    <footer style="background: #333; color: white; text-align: center; padding: 20px; margin-top: 40px;">
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div id="photoFeedbackList" style="margin-bottom: 25px;"></div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input
+                        type="number"
+                        id="photoNumber"
+                        placeholder="# Foto"
+                        min="1"
+                        max="246"
+                        style="flex: 0 0 100px; padding: 12px; border: 2px solid var(--gold); border-radius: 10px; background: rgba(255, 255, 255, 0.1); color: var(--cream); font-size: 1rem;"
+                    >
+                    <input
+                        type="text"
+                        id="photoChange"
+                        placeholder="Describe el cambio sugerido..."
+                        style="flex: 1; min-width: 200px; padding: 12px; border: 2px solid var(--gold); border-radius: 10px; background: rgba(255, 255, 255, 0.1); color: var(--cream); font-size: 1rem;"
+                    >
+                    <button
+                        onclick="addPhotoFeedback()"
+                        style="padding: 12px 25px; background: var(--gold); color: var(--emerald-dark); border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.3s ease;"
+                        onmouseover="this.style.background='var(--gold-light)'"
+                        onmouseout="this.style.background='var(--gold)'"
+                    >
+                        <i class="fas fa-plus"></i> Agregar
+                    </button>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: rgba(33, 150, 243, 0.1); border-left: 4px solid #2196f3; border-radius: 8px;">
+                    <p style="margin: 0; color: var(--cream); font-size: 0.95rem;">
+                        <strong style="color: var(--gold);"><i class="fas fa-mobile-alt"></i> Importante:</strong> Cuando presiones "Enviar Reporte", se abrirá WhatsApp automáticamente con tu selección lista para enviar al <strong style="color: var(--gold);">477-920-3776</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
         <p>Producciones Foro 7</p>
         <p>Fotografía, Video, Dron e Invitaciones Web</p>
         <p>Contacto: 477-920-3776</p>
     </footer>
+
+    <script src="js/selector.js"></script>
+    <script>
+        // Disable right-click on images to prevent easy downloads
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Disable dragging of images
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Disable common keyboard shortcuts for saving images
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S or Cmd+S
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
 </body>
 </html>

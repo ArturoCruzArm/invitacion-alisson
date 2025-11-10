@@ -1,22 +1,17 @@
 // ========================================
-// SELECTOR DE FOTOS - XV AÑOS ALISSON EMIRETH
+// GLOBAL VARIABLES
 // ========================================
+// Generate photo paths for 246 photos
+const photos = Array.from({length: 246}, (_, i) => `photos/foto_${String(i + 1).padStart(4, '0')}.webp`);
 
-const TOTAL_PHOTOS = 246;
-const STORAGE_KEY = 'alisson_xv_photo_selections';
-
-// Generate photo paths (foto0001.webp to foto00246.webp)
-let photos = [];
-for (let i = 1; i <= TOTAL_PHOTOS; i++) {
-    photos.push(`photos/foto${String(i).padStart(4, '0')}.webp`);
-}
-
-// LIMITS FOR ALEXA'S XV AÑOS
+// LIMITS FOR ALISSON'S PACKAGE
 const LIMITS = {
     impresion: 100,    // Máximo 100 fotos para impresión
-    ampliacion: 1     // Máximo 1 foto para ampliación
+    ampliacion: 1      // Máximo 1 foto para ampliación
     // redes_sociales: sin límite
 };
+
+const STORAGE_KEY = 'alisson_xv_photo_selections';
 let photoSelections = {};
 let currentPhotoIndex = null;
 let currentFilter = 'all';
@@ -66,7 +61,6 @@ function getStats() {
         ampliacion: 0,
         impresion: 0,
         redes_sociales: 0,
-        invitaciones_web: 0,
         descartada: 0,
         sinClasificar: photos.length
     };
@@ -75,7 +69,6 @@ function getStats() {
         if (selection.ampliacion) stats.ampliacion++;
         if (selection.impresion) stats.impresion++;
         if (selection.redes_sociales) stats.redes_sociales++;
-        if (selection.invitaciones_web) stats.invitaciones_web++;
         if (selection.descartada) stats.descartada++;
     });
 
@@ -91,7 +84,6 @@ function updateStats() {
     document.getElementById('countAmpliacion').textContent = stats.ampliacion;
     document.getElementById('countImpresion').textContent = stats.impresion;
     document.getElementById('countRedesSociales').textContent = stats.redes_sociales;
-    document.getElementById('countInvitacionesWeb').textContent = stats.invitaciones_web;
     document.getElementById('countDescartada').textContent = stats.descartada;
     document.getElementById('countSinClasificar').textContent = stats.sinClasificar;
 
@@ -114,103 +106,6 @@ function updateStats() {
             impresionCard.classList.remove('exceeded');
         }
     }
-
-    // Update featured photo section
-    updateFeaturedPhoto();
-}
-
-// ========================================
-// FEATURED PHOTO FUNCTIONS
-// ========================================
-function updateFeaturedPhoto() {
-    // Sección de fotografía destacada removida
-    // Esta función ya no hace nada
-}
-
-// ========================================
-// CANVAS PROTECTION FUNCTIONS
-// ========================================
-function loadImageToCanvas(imageSrc, canvas, photoNumber) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous'; // For CORS if needed
-
-        img.onload = function() {
-            const ctx = canvas.getContext('2d');
-
-            // Get the container size
-            const container = canvas.parentElement;
-            const containerWidth = container.clientWidth;
-            const containerHeight = container.clientHeight;
-
-            // Calculate scale to fit image in container
-            const scale = Math.min(
-                containerWidth / img.width,
-                containerHeight / img.height
-            );
-
-            // Set canvas display size (CSS)
-            canvas.style.width = containerWidth + 'px';
-            canvas.style.height = containerHeight + 'px';
-
-            // Set canvas buffer size (actual pixels)
-            const scaledWidth = img.width * scale;
-            const scaledHeight = img.height * scale;
-            canvas.width = scaledWidth;
-            canvas.height = scaledHeight;
-
-            // Draw the image scaled
-            ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
-
-            // Add watermark
-            addWatermark(ctx, scaledWidth, scaledHeight, photoNumber);
-
-            resolve();
-        };
-
-        img.onerror = function(err) {
-            console.error('Error loading image:', imageSrc, err);
-            reject(new Error(`Failed to load image: ${imageSrc}`));
-        };
-
-        img.src = imageSrc;
-    });
-}
-
-function addWatermark(ctx, width, height, photoNumber) {
-    // Semi-transparent watermark
-    ctx.save();
-
-    // Configure watermark style
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-    ctx.font = `${Math.floor(width / 20)}px Arial`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    // Add watermark text
-    const watermarkText = 'Alisson Emireth';
-    ctx.fillText(watermarkText, width / 2, height / 2);
-
-    // Add smaller photo number in corner
-    ctx.font = `${Math.floor(width / 30)}px Arial`;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-    ctx.textAlign = 'left';
-    ctx.fillText(`#${photoNumber}`, 20, height - 20);
-
-    ctx.restore();
-}
-
-function disableCanvasInteraction(canvas) {
-    // Disable right-click
-    canvas.addEventListener('contextmenu', e => e.preventDefault());
-
-    // Disable drag
-    canvas.addEventListener('dragstart', e => e.preventDefault());
-
-    // Disable selection
-    canvas.style.userSelect = 'none';
-    canvas.style.webkitUserSelect = 'none';
-    canvas.style.mozUserSelect = 'none';
 }
 
 // ========================================
@@ -222,7 +117,7 @@ function renderGallery() {
 
     photos.forEach((photo, index) => {
         const selection = photoSelections[index] || {};
-        const hasAny = selection.ampliacion || selection.impresion || selection.redes_sociales || selection.invitaciones_web || selection.descartada;
+        const hasAny = selection.ampliacion || selection.impresion || selection.redes_sociales || selection.descartada;
 
         const card = document.createElement('div');
         card.className = 'photo-card';
@@ -236,7 +131,6 @@ function renderGallery() {
             if (selection.ampliacion) categories.push('ampliacion');
             if (selection.impresion) categories.push('impresion');
             if (selection.redes_sociales) categories.push('redes_sociales');
-            if (selection.invitaciones_web) categories.push('invitaciones_web');
 
             if (categories.length > 1) {
                 card.classList.add('has-multiple');
@@ -249,11 +143,10 @@ function renderGallery() {
         let badgesHTML = '';
         if (hasAny) {
             badgesHTML = '<div class="photo-badges">';
-            if (selection.ampliacion) badgesHTML += '<span class="badge badge-ampliacion"><i class="fas fa-image"></i> Ampliación</span>';
-            if (selection.impresion) badgesHTML += '<span class="badge badge-impresion"><i class="fas fa-camera"></i> Impresión</span>';
-            if (selection.redes_sociales) badgesHTML += '<span class="badge badge-redes-sociales"><i class="fas fa-share-alt"></i> Redes Sociales</span>';
-            if (selection.invitaciones_web) badgesHTML += '<span class="badge badge-invitaciones-web"><i class="fas fa-globe"></i> Invitaciones Web</span>';
-            if (selection.descartada) badgesHTML += '<span class="badge badge-descartada"><i class="fas fa-times-circle"></i> Descartada</span>';
+            if (selection.ampliacion) badgesHTML += '<span class="badge badge-ampliacion">🖼️ Ampliación</span>';
+            if (selection.impresion) badgesHTML += '<span class="badge badge-impresion">📸 Impresión</span>';
+            if (selection.redes_sociales) badgesHTML += '<span class="badge badge-redes-sociales">📱 Redes Sociales</span>';
+            if (selection.descartada) badgesHTML += '<span class="badge badge-descartada">❌ Descartada</span>';
             badgesHTML += '</div>';
         }
 
@@ -292,14 +185,11 @@ function isPhotoVisible(index) {
         case 'redes-sociales':
             show = selection.redes_sociales === true;
             break;
-        case 'invitaciones-web':
-            show = selection.invitaciones_web === true;
-            break;
         case 'descartada':
             show = selection.descartada === true;
             break;
         case 'sin-clasificar':
-            show = !selection.ampliacion && !selection.impresion && !selection.redes_sociales && !selection.invitaciones_web && !selection.descartada;
+            show = !selection.ampliacion && !selection.impresion && !selection.redes_sociales && !selection.descartada;
             break;
     }
     return show;
@@ -334,10 +224,9 @@ function updateFilterButtons() {
     const stats = getStats();
 
     document.getElementById('btnFilterAll').textContent = `Todas (${photos.length})`;
-    document.getElementById('btnFilterAmpliacion').textContent = `Ampliación (${stats.ampliacion})`;
-    document.getElementById('btnFilterImpresion').textContent = `Impresión (${stats.impresion})`;
+    document.getElementById('btnFilterAmpliacion').textContent = `Ampliación (${stats.ampliacion}/${LIMITS.ampliacion})`;
+    document.getElementById('btnFilterImpresion').textContent = `Impresión (${stats.impresion}/${LIMITS.impresion})`;
     document.getElementById('btnFilterRedesSociales').textContent = `Redes Sociales (${stats.redes_sociales})`;
-    document.getElementById('btnFilterInvitacionesWeb').textContent = `Invitaciones Web (${stats.invitaciones_web})`;
     document.getElementById('btnFilterDescartada').textContent = `Descartadas (${stats.descartada})`;
     document.getElementById('btnFilterSinClasificar').textContent = `Sin Clasificar (${stats.sinClasificar})`;
 }
@@ -529,68 +418,57 @@ function saveModalSelection(callback) {
 // ========================================
 function exportToJSON() {
     const exportData = {
+        INSTRUCCIONES: '⚠️ IMPORTANTE: Por favor envía este archivo por WhatsApp al 4779203776',
+        whatsapp: '4779203776',
         fecha_exportacion: new Date().toISOString(),
-        evento: 'XV Años - Alisson Emireth',
+        quinceañera: 'Alisson Emireth',
         total_fotos: photos.length,
         estadisticas: getStats(),
-        selecciones: [],
-        sugerencias_de_cambios: {
-            fotos: feedbackData.photos.length > 0 ? feedbackData.photos : 'Sin cambios sugeridos'
-        }
+        selecciones: []
     };
 
     photos.forEach((photo, index) => {
         const selection = photoSelections[index];
-        if (selection && (selection.ampliacion || selection.impresion || selection.redes_sociales || selection.invitaciones_web || selection.descartada)) {
+        if (selection && (selection.ampliacion || selection.impresion || selection.redes_sociales || selection.descartada)) {
             exportData.selecciones.push({
                 numero_foto: index + 1,
                 archivo: photo,
                 ampliacion: selection.ampliacion || false,
                 impresion: selection.impresion || false,
                 redes_sociales: selection.redes_sociales || false,
-                invitaciones_web: selection.invitaciones_web || false,
                 descartada: selection.descartada || false
             });
         }
     });
 
-    // Convertir el JSON a texto formateado
-    const jsonText = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `seleccion-alisson-emireth-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
 
-    // Crear mensaje para WhatsApp
-    const message = `👑 SELECCIÓN DE FOTOS - XV AÑOS ALISSON EMIRETH\n\n${jsonText}`;
-
-    // Codificar el mensaje para URL
-    const encodedMessage = encodeURIComponent(message);
-
-    // Crear URL de WhatsApp
-    const whatsappURL = `https://wa.me/524779203776?text=${encodedMessage}`;
-
-    // Abrir WhatsApp en nueva ventana
-    window.open(whatsappURL, '_blank');
-
-    showToast('Abriendo WhatsApp para enviar reporte...', 'success');
+    showToast('📥 Reporte descargado. ¡Envíalo por WhatsApp al 4779203776!', 'success');
 }
 
 function generateTextSummary() {
     const stats = getStats();
-    let summary = '👑 SELECCIÓN DE FOTOS - XV AÑOS ALISSON EMIRETH\n';
+    let summary = '📸 SELECCIÓN DE FOTOS - XV AÑOS ALISSON EMIRETH\n';
     summary += '═══════════════════════════════════════\n\n';
     summary += `📊 RESUMEN GENERAL:\n`;
     summary += `   Total de fotos: ${photos.length}\n`;
     summary += `   🖼️  Para ampliación: ${stats.ampliacion}\n`;
     summary += `   📸 Para impresión: ${stats.impresion}\n`;
     summary += `   📱 Para redes sociales: ${stats.redes_sociales}\n`;
-    summary += `   🌐 Para invitaciones web: ${stats.invitaciones_web}\n`;
     summary += `   ❌ Descartadas: ${stats.descartada}\n`;
     summary += `   ⭕ Sin clasificar: ${stats.sinClasificar}\n\n`;
 
-    const categories = ['ampliacion', 'impresion', 'redes_sociales', 'invitaciones_web', 'descartada'];
+    const categories = ['ampliacion', 'impresion', 'redes_sociales', 'descartada'];
     const categoryNames = {
         ampliacion: '🖼️  AMPLIACIÓN',
         impresion: '📸 IMPRESIÓN',
         redes_sociales: '📱 REDES SOCIALES',
-        invitaciones_web: '🌐 INVITACIONES WEB',
         descartada: '❌ DESCARTADAS'
     };
 
@@ -609,15 +487,6 @@ function generateTextSummary() {
             summary += `   Total: ${photosInCategory.length}\n\n`;
         }
     });
-
-    // Add feedback section
-    if (feedbackData.photos.length > 0) {
-        summary += `\n💬 SUGERENCIAS DE CAMBIOS EN FOTOS:\n`;
-        feedbackData.photos.forEach(item => {
-            summary += `   📸 Foto #${item.photoNumber}: ${item.change}\n`;
-        });
-        summary += '\n';
-    }
 
     summary += `\n📅 Generado el: ${new Date().toLocaleString('es-MX')}\n`;
 
@@ -664,12 +533,8 @@ function showToast(message, type = 'success') {
 // EVENT LISTENERS
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎬 Iniciando selector de fotos - Alisson Emireth XV Años');
-    console.log(`📸 Total de fotos: ${TOTAL_PHOTOS}`);
-
     // Load saved selections
     loadSelections();
-    console.log('✅ Selecciones cargadas:', Object.keys(photoSelections).length);
 
     // Render gallery
     renderGallery();
@@ -685,7 +550,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnFilterAmpliacion').addEventListener('click', () => setFilter('ampliacion'));
     document.getElementById('btnFilterImpresion').addEventListener('click', () => setFilter('impresion'));
     document.getElementById('btnFilterRedesSociales').addEventListener('click', () => setFilter('redes-sociales'));
-    document.getElementById('btnFilterInvitacionesWeb').addEventListener('click', () => setFilter('invitaciones-web'));
     document.getElementById('btnFilterDescartada').addEventListener('click', () => setFilter('descartada'));
     document.getElementById('btnFilterSinClasificar').addEventListener('click', () => setFilter('sin-clasificar'));
 
@@ -694,7 +558,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnFilterAmpliacion').dataset.filter = 'ampliacion';
     document.getElementById('btnFilterImpresion').dataset.filter = 'impresion';
     document.getElementById('btnFilterRedesSociales').dataset.filter = 'redes-sociales';
-    document.getElementById('btnFilterInvitacionesWeb').dataset.filter = 'invitaciones-web';
     document.getElementById('btnFilterDescartada').dataset.filter = 'descartada';
     document.getElementById('btnFilterSinClasificar').dataset.filter = 'sin-clasificar';
 
@@ -707,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnClear').addEventListener('click', clearAllSelections);
 
     // Modal controls
-    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.querySelector('.modal-close').addEventListener('click', closeModal);
     document.getElementById('btnCancelSelection').addEventListener('click', closeModal);
     document.getElementById('btnSaveSelection').addEventListener('click', saveModalSelection);
 
@@ -735,6 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show warning if exceeding recommended limit (but allow it)
             if (!isCurrentlySelected && LIMITS[category]) {
                 const stats = getStats();
+                // Add 1 because we're about to select this one
                 const futureCount = stats[category] + 1;
                 if (futureCount > LIMITS[category]) {
                     const messages = {
@@ -773,17 +637,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Navigation button click handlers
-    document.getElementById('btnPrevPhoto').addEventListener('click', (e) => {
-        e.stopPropagation();
-        navigatePhoto('prev');
-    });
+    const btnPrevPhoto = document.getElementById('btnPrevPhoto');
+    const btnNextPhoto = document.getElementById('btnNextPhoto');
 
-    document.getElementById('btnNextPhoto').addEventListener('click', (e) => {
-        e.stopPropagation();
-        navigatePhoto('next');
-    });
+    if (btnPrevPhoto) {
+        btnPrevPhoto.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigatePhoto('prev');
+        });
+    }
 
-    console.log('✅ ¡Selector de fotos inicializado correctamente!');
+    if (btnNextPhoto) {
+        btnNextPhoto.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigatePhoto('next');
+        });
+    }
+
+    console.log('Selector de fotos inicializado');
+    console.log(`Total de fotos: ${photos.length}`);
+    console.log('Selecciones cargadas:', photoSelections);
 });
 
 // ========================================
@@ -801,211 +674,4 @@ document.addEventListener('visibilitychange', () => {
 // ========================================
 window.addEventListener('beforeunload', (e) => {
     saveSelections();
-});
-
-// ========================================
-// FEEDBACK MANAGEMENT
-// ========================================
-const FEEDBACK_KEY = 'alisson_xv_feedback';
-let feedbackData = {
-    photos: []
-};
-
-// Load feedback from localStorage
-function loadFeedback() {
-    try {
-        const saved = localStorage.getItem(FEEDBACK_KEY);
-        if (saved) {
-            feedbackData = JSON.parse(saved);
-            renderFeedbackLists();
-        }
-    } catch (error) {
-        console.error('Error loading feedback:', error);
-    }
-}
-
-// Save feedback to localStorage
-function saveFeedback() {
-    try {
-        localStorage.setItem(FEEDBACK_KEY, JSON.stringify(feedbackData));
-    } catch (error) {
-        console.error('Error saving feedback:', error);
-    }
-}
-
-// Add photo feedback
-function addPhotoFeedback() {
-    const photoNumber = document.getElementById('photoNumber').value.trim();
-    const change = document.getElementById('photoChange').value.trim();
-
-    if (!photoNumber || !change) {
-        showToast('Por favor completa ambos campos', 'error');
-        return;
-    }
-
-    if (photoNumber < 1 || photoNumber > TOTAL_PHOTOS) {
-        showToast(`El número de foto debe estar entre 1 y ${TOTAL_PHOTOS}`, 'error');
-        return;
-    }
-
-    feedbackData.photos.push({ photoNumber: parseInt(photoNumber), change });
-    saveFeedback();
-    renderFeedbackLists();
-
-    // Clear inputs
-    document.getElementById('photoNumber').value = '';
-    document.getElementById('photoChange').value = '';
-
-    showToast('Sugerencia de foto agregada', 'success');
-}
-
-// Remove photo feedback
-function removePhotoFeedback(index) {
-    feedbackData.photos.splice(index, 1);
-    saveFeedback();
-    renderFeedbackLists();
-    showToast('Sugerencia eliminada', 'success');
-}
-
-// Render feedback lists
-function renderFeedbackLists() {
-    const photoList = document.getElementById('photoFeedbackList');
-
-    if (!photoList) return;
-
-    // Render photo feedback
-    if (feedbackData.photos.length === 0) {
-        photoList.innerHTML = '<p style="color: rgba(250, 248, 243, 0.5); font-style: italic; margin: 10px 0; text-align: center;">No hay sugerencias de cambios</p>';
-    } else {
-        photoList.innerHTML = feedbackData.photos.map((item, index) => `
-            <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; margin-bottom: 10px; border: 1px solid rgba(212, 175, 55, 0.3);">
-                <span style="font-weight: 600; color: var(--gold); min-width: 70px; font-size: 1rem;"><i class="fas fa-camera"></i> #${item.photoNumber}</span>
-                <span style="flex: 1; color: var(--cream); font-size: 0.95rem;">${item.change}</span>
-                <button onclick="removePhotoFeedback(${index})" style="padding: 8px 12px; background: #f44336; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease;" onmouseover="this.style.background='#d32f2f'" onmouseout="this.style.background='#f44336'"><i class="fas fa-trash-alt"></i></button>
-            </div>
-        `).join('');
-    }
-}
-
-// Load feedback on page load
-document.addEventListener('DOMContentLoaded', () => {
-    loadFeedback();
-});
-
-// Intersection Observer for Scroll Animations
-function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .fade-in, .scale-in');
-
-    const observerOptions = {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, observerOptions);
-
-    animatedElements.forEach(el => observer.observe(el));
-}
-
-// Initialize scroll animations on page load
-window.addEventListener('load', initScrollAnimations);
-
-// ========================================
-// FEATURED IMPROVEMENT ACTIONS
-// ========================================
-document.addEventListener('DOMContentLoaded', () => {
-    // Accept Changes Button
-    const btnAcceptChanges = document.getElementById('btnAcceptChanges');
-    if (btnAcceptChanges) {
-        btnAcceptChanges.addEventListener('click', () => {
-            if (confirm('¿Confirmas que deseas conservar estas mejoras en la Foto #49?\n\nLa foto mejorada será marcada automáticamente para AMPLIACIÓN.')) {
-                // Mark photo 49 (index 48) for ampliacion
-                const photoIndex = 48; // foto0049 es índice 48 (0-based)
-
-                photoSelections[photoIndex] = {
-                    ampliacion: true,
-                    impresion: false,
-                    redes_sociales: false,
-                    invitaciones_web: false,
-                    descartada: false
-                };
-
-                saveSelections();
-                renderGallery();
-                updateStats();
-                updateFilterButtons();
-
-                showToast('✅ Cambios conservados. Foto #49 marcada para AMPLIACIÓN', 'success');
-
-                // Scroll to gallery
-                setTimeout(() => {
-                    document.querySelector('.photos-grid').scrollIntoView({ behavior: 'smooth' });
-                }, 500);
-            }
-        });
-    }
-
-    // Suggest More Changes Button
-    const btnSuggestMoreChanges = document.getElementById('btnSuggestMoreChanges');
-    if (btnSuggestMoreChanges) {
-        btnSuggestMoreChanges.addEventListener('click', () => {
-            const changes = prompt('¿Qué cambios adicionales te gustaría que se realicen en la Foto #49?\n\nDescribe las mejoras que necesitas:');
-
-            if (changes && changes.trim() !== '') {
-                // Add to feedback
-                feedbackData.photos.push({
-                    photoNumber: 49,
-                    change: `[MEJORA ADICIONAL] ${changes.trim()}`
-                });
-
-                saveFeedback();
-                renderFeedbackLists();
-
-                showToast('✅ Sugerencia de cambios adicionales agregada para Foto #49', 'success');
-
-                // Show confirmation
-                alert('📝 Tu sugerencia ha sido registrada:\n\n"' + changes.trim() + '"\n\nSe enviará junto con el reporte al fotógrafo para aplicar los cambios adicionales.');
-            }
-        });
-    }
-
-    // Undo Changes Button
-    const btnUndoChanges = document.getElementById('btnUndoChanges');
-    if (btnUndoChanges) {
-        btnUndoChanges.addEventListener('click', () => {
-            if (confirm('¿Estás segura de que quieres DESHACER las mejoras aplicadas?\n\nSe volverá a usar la foto ORIGINAL sin editar.')) {
-                // Add feedback to use original
-                feedbackData.photos.push({
-                    photoNumber: 49,
-                    change: '[USAR ORIGINAL] Prefiero la foto original sin las mejoras aplicadas'
-                });
-
-                // Mark as descartada the improved version
-                const photoIndex = 48;
-                photoSelections[photoIndex] = {
-                    ampliacion: false,
-                    impresion: false,
-                    redes_sociales: false,
-                    invitaciones_web: false,
-                    descartada: true
-                };
-
-                saveFeedback();
-                saveSelections();
-                renderFeedbackLists();
-                renderGallery();
-                updateStats();
-                updateFilterButtons();
-
-                showToast('↩️ Cambios deshachos. Se usará la foto ORIGINAL', 'success');
-
-                alert('✅ Las mejoras han sido descartadas.\n\nSe usará la foto ORIGINAL sin editar para la ampliación.\n\nEsta preferencia se enviará al fotógrafo en el reporte.');
-            }
-        });
-    }
 });
