@@ -49,7 +49,6 @@ function loadSelections() {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             photoSelections = JSON.parse(saved);
-            console.log('Selecciones cargadas desde localStorage:', photoSelections);
         }
     } catch (error) {
         console.error('Error cargando selecciones:', error);
@@ -60,7 +59,6 @@ function loadSelections() {
 function saveSelections() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(photoSelections));
-        console.log('Selecciones guardadas en localStorage');
     } catch (error) {
         console.error('Error guardando selecciones:', error);
         showToast('Error al guardar. Verifica el espacio del navegador.', 'error');
@@ -418,7 +416,6 @@ function applyFilter() {
 }
 
 function setFilter(filter) {
-    console.log('Setting filter to:', filter);
     currentFilter = filter;
     applyFilter();
 
@@ -470,7 +467,6 @@ function findNextVisiblePhoto(startIndex, direction) {
 // MODAL FUNCTIONS
 // ========================================
 function openModal(index) {
-    console.log(`Opening modal for index: ${index}, currentFilter: ${currentFilter}`);
     currentPhotoIndex = index;
     const modal = document.getElementById('photoModal');
     const modalImageContainer = document.querySelector('.modal-image-container');
@@ -589,12 +585,10 @@ function hasUnsavedChanges() {
 }
 
 function navigatePhoto(direction) {
-    console.log(`Navigating photo: ${direction}`);
     if (currentPhotoIndex === null) return;
 
     const proceed = () => {
         const newIndex = findNextVisiblePhoto(currentPhotoIndex, direction);
-        console.log(`findNextVisiblePhoto returned: ${newIndex}`);
 
         if (newIndex !== null) {
             // Simply re-open modal with new index
@@ -806,16 +800,7 @@ function copyToClipboard() {
     navigator.clipboard.writeText(summary).then(() => {
         showToast('Resumen copiado al portapapeles', 'success');
     }).catch(() => {
-        // Fallback for older browsers
-        const textarea = document.createElement('textarea');
-        textarea.value = summary;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        showToast('Resumen copiado al portapapeles', 'success');
+        showToast('No se pudo copiar. Selecciona el texto manualmente.', 'error');
     });
 }
 
@@ -840,13 +825,9 @@ function showToast(message, type = 'success') {
 // EVENT LISTENERS
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎬 Iniciando selector de fotos - Alisson Emireth XV Años');
-    console.log(`📸 Total de fotos: ${TOTAL_PHOTOS}`);
-    console.log(`🎥 Total de videos: ${videos.length}`);
 
     // Load saved selections
     loadSelections();
-    console.log('✅ Selecciones cargadas:', Object.keys(photoSelections).length);
 
     // Render videos and gallery
     renderVideos();
@@ -961,7 +942,6 @@ document.addEventListener('DOMContentLoaded', () => {
         navigatePhoto('next');
     });
 
-    console.log('✅ ¡Selector de fotos inicializado correctamente!');
 });
 
 // ========================================
@@ -969,7 +949,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================================
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-        console.log('Página oculta - guardando selecciones...');
         saveSelections();
     }
 });
